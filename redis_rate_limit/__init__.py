@@ -32,6 +32,9 @@ class TooManyRequests(Exception):
     Occurs when the maximum number of requests is reached for a given resource
     of an specific user.
     """
+    requests_amount: int
+    def __init__(self, requests_amount):
+        self.requests_amount = requests_amount
     pass
 
 
@@ -143,7 +146,7 @@ class RateLimit(object):
                 INCREMENT_SCRIPT, 1, self._rate_limit_key, self._expire, increment_by)
 
         if int(current_usage) > self._max_requests:
-            raise TooManyRequests()
+            raise TooManyRequests(current_usage)
 
         return current_usage
 
